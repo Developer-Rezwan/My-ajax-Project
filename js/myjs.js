@@ -1,4 +1,5 @@
 jQuery(document).ready(function() {
+    load_table()
     insert_data();
     check_data();
     //autocomplete();
@@ -8,6 +9,16 @@ jQuery(document).ready(function() {
     data_update();
     close();
 });
+/*********** Table Load **************/
+function load_table(){
+  $.ajax({
+    url : 'show_table.php',
+    method : 'post',
+    success:function(data){
+      $('#show-table').html(data);
+    }
+  });
+}
 
 /******************************************* Modal close function *************************/
 function close() {
@@ -32,7 +43,8 @@ function insert_data() {
                 method: 'post',
                 data: { Username: username, Email: email, Password: password },
                 success: function(data) {
-                    $('#table').html(data);
+                    if(data == 1){
+                    load_table();
                     $('#exampleModal').modal('hide');
                     $('form').trigger('reset');
                     $('#success').html("<center> Data successfully Inserted! <center>");
@@ -40,6 +52,7 @@ function insert_data() {
                     setInterval(function(){
                       $('#success').slideUp('slow');
                     },3000);
+                  }
                 }
             });
         }
@@ -164,11 +177,11 @@ function delete_data() {
      var value = $(this).val();
      if(value !== ""){
       $.ajax({
-       url : 'show-table.php',
+       url : 'live_search.php',
        method : 'post',
        data : {Value : value},
        success : function(data){
-         $('#table').html(data).fadeIn('slow');
+         $('#show-table').html(data).fadeIn('slow');
        }
      });
      }else{    
@@ -180,42 +193,41 @@ function delete_data() {
 /********** Data update *******************/
 function data_update(){
 
-  $('#edit').on('click',function(){
-    var value = $(this).data('upvalue');
-    var edit_data = this ;
-    $.ajax({
-      url:'data_update.php',
-      method:'post',
-      data:{Value:value},
-      success:function(data){
-        $('#form-id').html(data);
-      }
-    }); /** ajax end here **/
+  $(document).on('click','#update',function(){
+   var value = $(this).data('upvalue');
+   $.ajax({
+    url : 'data_update.php',
+    method : 'post',
+    data : {Value:value},
+    success : function(data){
+     $('#update-form').html(data);
+    }
+   }); // ajax end here
   });
-  
-  $('#save-changes').on('click',function(){
-      var values = $(edit_data).data('upvalue');
-      alert(values);
-      return false;
-      var username = $('#up-username').val();
-      var email = $('#up-email').val();
-      var password = $('#up-password').val();
-      if (username != "" || email != "" || password != ""){
-      $.ajax({
-      url:'data_update.php',
-      method:'post',
-      data:{Username:username,Email:email,Password:password,Value:values},
-        success:function(data){
-          if(data === 1){
-          $('#exampleModal').modal('hide');
-          $('#success').html("<center> Data successfully Inserted! <center>");
-          $('#success').addClass("alert alert-success");
-          setInterval(function(){
-            $('#success').slideUp('slow');
-          },3000);
-          }
-      }
-    }); /** Ajax end here **/
-      }
-  });
-}
+
+ $(document).on('click','#save-changes',function(){
+   var id = $("#hidden").val();
+   var username = $('#up-username').val();
+   var email = $('#up-email').val();
+   var password = $('#up-password').val();
+
+   $.ajax({
+    url : 'data_update.php',
+    method : 'post',
+    data : {Username:username,Email:email,Password:password,id:id},
+    success : function(data){
+       if(data == 1){
+       load_table();
+       $('#exampleModal-2').modal('hide');
+       $('#success').html("<center> Data successfully Updated! <center>");
+       $('#success').addClass("alert alert-success");
+       setInterval(function(){
+         $('#success').slideUp('slow');
+       },3000);
+     }
+     
+    }
+   });
+   
+ });
+} /** The function is end here **/

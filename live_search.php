@@ -24,8 +24,8 @@ require_once 'database.php';
 		      <td >' .$row['Email'] .'</p></td>
 		      <td>
 		      	<span>
-		      	<button id="edit" class="btn btn-primary" data-upvalue = "'.$row['ID'].'"><i class="fas fa-edit"></i></button>
-		      	<button id="delete" data-myvalue = "'.$row['ID'].'"  class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+		      	<button id="update" data-toggle="modal" data-target="#exampleModal-2" data-upvalue = "'.$row['ID'].'" class="btn btn-primary"><i class="fas fa-edit"></i></button>
+		      	<button id="delete" data-myvalue = "'. $row['ID'] .'"  class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
 		      </span>
 		     </td>
 		    </tr>';
