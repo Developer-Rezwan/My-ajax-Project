@@ -1,0 +1,22 @@
+#search-status{
+
+	position: absolute;
+    width: 89%;
+    border:1px solid gray;
+    border-radius: 5px;
+    background: #dee2e6;
+    display: none;
+    border: none;
+}
+
+ul li{
+    display: block;
+    font-size: 15px;
+    border-bottom: 1px solid #dee2e6;
+    background: #dee2e6;
+}
+
+ul li:hover{
+	font-size: 20px;
+	cursor: pointer;
+}
